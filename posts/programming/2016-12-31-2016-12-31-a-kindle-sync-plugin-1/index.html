@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/imgs/pikachu.png">
+  <link rel="mask-icon" href="/imgs/pikachu.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.zhaokangbinggenius.top","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前面说过动了把自己的生活数据汇总起来的想法，虽然最近挣扎于学Java和实习的事情，还是忍不住想要动手了。尤其是昨天上午看到Kindle已经完美越狱的消息（然而好几个月之前就可以了啊啊啊啊今天才发现），顿时感觉阅读数据有着落了,先把这部分做完。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写一个kindle同步插件(一)">
+<meta property="og:url" content="https://blog.zhaokangbinggenius.top/posts/programming/2016-12-31-2016-12-31-a-kindle-sync-plugin-1/index.html">
+<meta property="og:site_name" content="K.B.Zhao&#39;s Life Track">
+<meta property="og:description" content="前面说过动了把自己的生活数据汇总起来的想法，虽然最近挣扎于学Java和实习的事情，还是忍不住想要动手了。尤其是昨天上午看到Kindle已经完美越狱的消息（然而好几个月之前就可以了啊啊啊啊今天才发现），顿时感觉阅读数据有着落了,先把这部分做完。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/kindle_freetime_analytics.png">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/metric_sh.jpg">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/kindle_ss_20161231_1.png">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/kindle_ss_20161231_2.png">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/kindle_ss_20161231_3.png">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/metric_struc.JPG">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/201612/show_time.png">
+<meta property="og:image" content="https://blog.zhaokangbinggenius.top/imgs/201612/show_info.png">
+<meta property="article:published_time" content="2016-12-31T14:52:40.000Z">
+<meta property="article:modified_time" content="2026-02-04T14:48:34.075Z">
+<meta property="article:author" content="Kangbing Zhao">
+<meta property="article:tag" content="kindle">
+<meta property="article:tag" content="统计">
+<meta property="article:tag" content="越狱">
+<meta property="article:tag" content="阅读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.zhaokangbinggenius.top/imgs/kindle_freetime_analytics.png">
+
+
+<link rel="canonical" href="https://blog.zhaokangbinggenius.top/posts/programming/2016-12-31-2016-12-31-a-kindle-sync-plugin-1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.zhaokangbinggenius.top/posts/programming/2016-12-31-2016-12-31-a-kindle-sync-plugin-1/","path":"posts/programming/2016-12-31-2016-12-31-a-kindle-sync-plugin-1/","title":"写一个kindle同步插件(一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>写一个kindle同步插件(一) | K.B.Zhao's Life Track</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">K.B.Zhao's Life Track</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">编程，阅读，日常，碎碎念</p>
+      <img class="custom-logo-image" src="/imgs/pikachu.png" alt="K.B.Zhao's Life Track">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-编程"><a href="/categories/programming" rel="section"><i class="fa fa-laptop-code fa-fw"></i>编程</a></li><li class="menu-item menu-item-阅读"><a href="/categories/reading" rel="section"><i class="fa fa-book fa-fw"></i>阅读</a></li><li class="menu-item menu-item-日常"><a href="/categories/life" rel="section"><i class="fa fa-camera fa-fw"></i>日常</a></li><li class="menu-item menu-item-碎碎念"><a href="/categories/snippet" rel="section"><i class="fa fa-regular fa-face-laugh-wink fa-fw"></i>碎碎念</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="nav-number">1.</span> <span class="nav-text">方案选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step0-%E8%B6%8A%E7%8B%B1Kindle"><span class="nav-number">2.</span> <span class="nav-text">Step0 越狱Kindle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step1-KUAL%E6%8F%92%E4%BB%B6%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">Step1 KUAL插件分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#menu-json"><span class="nav-number">3.1.</span> <span class="nav-text">.&#x2F;menu.json:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-metric-sh"><span class="nav-number">3.2.</span> <span class="nav-text">.&#x2F;bin&#x2F;metric.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-service-sh%EF%BC%9A"><span class="nav-number">3.3.</span> <span class="nav-text">.&#x2F;bin&#x2F;service.sh：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-metric-setup-sh%EF%BC%9A"><span class="nav-number">3.4.</span> <span class="nav-text">.&#x2F;bin&#x2F;metric_setup.sh：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step2-%E5%BC%80%E5%A7%8B%E5%8A%A8%E6%89%8B%EF%BC%81"><span class="nav-number">4.</span> <span class="nav-text">Step2 开始动手！</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%9C%88%E4%BB%BD%E3%80%81%E6%98%9F%E6%9C%9F%E7%BB%9F%E8%AE%A1%EF%BC%8C"><span class="nav-number">4.1.</span> <span class="nav-text">添加月份、星期统计，</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BUG-%E6%97%B6%E9%97%B4%E8%B5%B7%E5%A7%8B%E9%97%AE%E9%A2%98"><span class="nav-number">4.2.</span> <span class="nav-text">BUG-时间起始问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BUG-%E8%8E%AB%E5%90%8D%E7%9A%84%E6%97%B6%E9%97%B4%E5%BD%92%E9%9B%B6%EF%BC%9F"><span class="nav-number">4.3.</span> <span class="nav-text">BUG-莫名的时间归零？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%B1%95%E7%A4%BA"><span class="nav-number">4.4.</span> <span class="nav-text">信息展示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">5.</span> <span class="nav-text">当前成果展示</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kangbing Zhao</p>
+  <div class="site-description" itemprop="description">Logging, Analysing, Hacking the life.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2016-12-31-2016-12-31-a-kindle-sync-plugin-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="写一个kindle同步插件(一) | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          写一个kindle同步插件(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-31 14:52:40" itemprop="dateCreated datePublished" datetime="2016-12-31T14:52:40+00:00">2016-12-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>前面说过动了把自己的生活数据汇总起来的想法，虽然最近挣扎于学Java和实习的事情，还是忍不住想要动手了。尤其是昨天上午看到Kindle已经完美越狱的消息（然而好几个月之前就可以了啊啊啊啊今天才发现），顿时感觉阅读数据有着落了,先把这部分做完。  </p>
+<span id="more"></span>
+<h2 id="方案选择"><a href="#方案选择" class="headerlink" title="方案选择"></a>方案选择</h2><p>搜了一番同步Kindle数据的方法，主要有三种：  </p>
+<ul>
+<li>一种是利用Kindle的家长监护功能(parental control)。设置之后就可以记录本月阅读时间、页数，设置每天阅读目标之后还有完成目标数。这种方法最简单稳定，效果图（<a target="_blank" rel="noopener" href="http://www.dshack.net/2014/11/04/tracking-reading-statistics-on-the-kindle/">资料来自这里</a>）是这样的:<br><img src="/imgs/kindle_freetime_analytics.png">      </li>
+<li>另一种是越狱刷多看。多看统计的阅读记录还能与其他平台多看APP上的阅读记录合并，统计信息更为全面。  </li>
+<li>最后还搜到了一个<a target="_blank" rel="noopener" href="http://tieba.baidu.com/p/4077881510">kindle脚本</a>，越狱之后从Kindle系统日志中读取阅读记录并呈现出来。效果图如下：<br><img src="/imgs/metric_sh.jpg"></li>
+</ul>
+<p>由于我的最终目的是采集Kindle阅读信息再进行汇总处理，所以前两种无法导出的方式自然就不适用了，主要思路也基于第三种方式进行改进。不过还是建议不想折腾的朋友试试前两种。 </p>
+<h2 id="Step0-越狱Kindle"><a href="#Step0-越狱Kindle" class="headerlink" title="Step0 越狱Kindle"></a>Step0 越狱Kindle</h2><p>暑假刚买的时候听说Paperwhite3只能拆机飞线用串口越狱，懒得拆机加上作为阅读器还是以稳定为主所以一直没动手。昨天意外发现Paperwhite3、Voyage、Oasis都有了不拆机完美越狱（<a target="_blank" rel="noopener" href="https://kindlefere.com/post/410.html">中文教程</a> &amp; <a target="_blank" rel="noopener" href="http://www.mobileread.com/forums/showthread.php?t=275877">英文教程</a>），而且以后系统升级越狱状态依然保留（只是插件需要重新安装）。于是花了三四个小时越狱、升级系统到5.8.7、安装了一堆必需的插件（MrPI、KUAL、Helper、USBNetwork、KOReader）。话说KOReader重排版效果真是不错，就是不知道阅读记录会不会被包含。<br>秀一下越狱后界面O(∩_∩)O~~：<br><img src="/imgs/kindle_ss_20161231_1.png"><br><img src="/imgs/kindle_ss_20161231_2.png"><br><img src="/imgs/kindle_ss_20161231_3.png"></p>
+<h2 id="Step1-KUAL插件分析"><a href="#Step1-KUAL插件分析" class="headerlink" title="Step1 KUAL插件分析"></a>Step1 KUAL插件分析</h2><p>下载了上面提到的<a target="_blank" rel="noopener" href="http://tieba.baidu.com/p/4077881510">Kindle统计脚本</a>之后使用了一下，功能比较简单，但是在这个基础上修改也不会太难。然后就开始了艰难的修改之路（大雾）。<br>插件结构是这样的：<img src="/imgs/metric_struc.JPG"><br>找了一下<a target="_blank" rel="noopener" href="http://wiki.mobileread.com/wiki/KUAL_What%27s_New">KUAL开发文档</a>（吐槽一下mobilread论坛大神不少，但是文档还真是难找）之后大概看懂了插件结构，主要涉及下面几个文件：  </p>
+<h3 id="menu-json"><a href="#menu-json" class="headerlink" title=".&#x2F;menu.json:"></a>.&#x2F;menu.json:</h3><p>定义了菜单按钮和每个按钮绑定的执行脚本，比如向.&#x2F;bin&#x2F;metric_setup.sh发送enable、disable、reset来执行启用、禁用和重置操作。 对应关系如下： </p>
+<table><tr><th>按钮</th><th>脚本</th></tr><tr><td>查看阅读统计</td><td>metric.sh</td></tr><tr><td>禁用阅读统计</td><td>metric_setup.sh</td></tr><tr><td>清除统计记录</td><td>metric_setup.sh</td></tr></table>
+
+<h3 id="bin-metric-sh"><a href="#bin-metric-sh" class="headerlink" title=".&#x2F;bin&#x2F;metric.sh"></a>.&#x2F;bin&#x2F;metric.sh</h3><p>计算累积阅读时间和今日阅读时间，每次点击“查看阅读统计”时执行一次。<br>具体做法是从$BASEDIR&#x2F;log&#x2F;metrics_generic_result读取阅读记录：每行代表一条记录，第一列记录写入时间，第二列阅读时长（毫秒），然后从&#x2F;var&#x2F;log&#x2F;metrics_generic中读取记录保存到$BASEDIR&#x2F;log&#x2F;metrics_generic_temp（格式与上相同）并累加计算。</p>
+<h3 id="bin-service-sh："><a href="#bin-service-sh：" class="headerlink" title=".&#x2F;bin&#x2F;service.sh："></a>.&#x2F;bin&#x2F;service.sh：</h3><p>抽取系统日志中的阅读时长信息并保存到$BASEDIR&#x2F;log&#x2F;metrics_generic_result中。<br>系统日志中与阅读相关的信息保存在&#x2F;var&#x2F;log&#x2F;metrics_generic中，一段时间后压缩到<br>&#x2F;var&#x2F;local&#x2F;log&#x2F;metrics_generic_%08d*中，需要注意的是，metrics_generic中的日志会被不断压缩并追加到&#x2F;var&#x2F;local&#x2F;log&#x2F;*下的对应文件，直到达到一定大小（未确认触发条件）再建立新的压缩文件。同时，旧的压缩日志会定期被系统删除（未确认触发条件），在&#x2F;var&#x2F;local&#x2F;log&#x2F;目录下有metrics_generic_oldest和metrics_generic_youngest两个文件记录了最老和最新压缩日志的编号（8位整数）。同时，此脚本在$BASEDIR&#x2F;etc下建立metrics_generic_current文件记录下一个被处理的压缩日志编号。</p>
+<h3 id="bin-metric-setup-sh："><a href="#bin-metric-setup-sh：" class="headerlink" title=".&#x2F;bin&#x2F;metric_setup.sh："></a>.&#x2F;bin&#x2F;metric_setup.sh：</h3><p>执行对应的菜单操作。<br>从.&#x2F;menu.json中可以看出，此脚本接受三个参数：</p>
+<ol>
+<li>enable: 开启阅读统计<br> 在&#x2F;etc&#x2F;crontab&#x2F;root中写入定时任务以每30分钟执行一次.&#x2F;bin&#x2F;metric_service.h，同时在.&#x2F;etc&#x2F;下创建enable文件。</li>
+<li>disable: 禁用阅读统计<br> 删除上述定时任务并删除enable文件</li>
+<li>reset: 清除统计记录<br> 删除.&#x2F;etc和.&#x2F;log下的所有文件</li>
+</ol>
+<hr>
+<p>看这几个bash脚本才发现几乎把语法忘得差不多了，恶补了一番之后有因为手头没有Kindle原始日志文件（&#x2F;var&#x2F;local&#x2F;log&#x2F;metrics_generic_%08d*），对脚本的理解也模模糊糊，于是又去装了USBNetwork以便用ssh和filezilla直接对Kindle进行操作。昨天晚上出去吃饭今天上午打球好累，先写到这里吧。<br>to be continue…  </p>
+<hr>
+<p>2017.02.09更新：</p>
+<h2 id="Step2-开始动手！"><a href="#Step2-开始动手！" class="headerlink" title="Step2 开始动手！"></a>Step2 开始动手！</h2><p>最终目标很远，那么先完成一个小目标——添加一点功能同时熟悉一下环境好了。</p>
+<h3 id="添加月份、星期统计，"><a href="#添加月份、星期统计，" class="headerlink" title="添加月份、星期统计，"></a>添加月份、星期统计，</h3><p>当前插件已经获取了时间信息，每行记录都包含两列数据：记录时间和阅读时长。那么只需要在累计的时候加入星期和月份判断的代码就行，话不多说直接上代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># ./bin/metric.sh</span><br><span class="line">BASEDIR=/mnt/us/extensions/kykky</span><br><span class="line">TOTAL=0</span><br><span class="line">TODAY=0</span><br><span class="line">WEEK=0</span><br><span class="line">MONTH=0</span><br><span class="line">TODAYTIME=`date +%s -d 00:00`</span><br><span class="line">WEEKTIME=$((TODAYTIME-(`date +%w`-1)*24*60*60)) #星期一零点</span><br><span class="line">MONTHTIME=$((TODAYTIME-(`date +%e` -1)*24*60*60)) #本月1号零点</span><br><span class="line">analyze() # 阅读时间统计</span><br><span class="line">&#123;</span><br><span class="line">	while read ENDTIME DURATION TEMP</span><br><span class="line">	do</span><br><span class="line">		STARTTIME=$((ENDTIME-DURATION/1000)) </span><br><span class="line">		DURATION=$((DURATION/1000))</span><br><span class="line">		TOTAL=$((TOTAL+DURATION))</span><br><span class="line">	</span><br><span class="line">		if [[ $STARTTIME -gt $TODAYTIME ]]; then</span><br><span class="line">			TODAY=$((TODAY+DURATION))</span><br><span class="line">		else</span><br><span class="line">			if [[ $((STARTTIME+DURATION)) -gt $TODAYTIME ]]; then</span><br><span class="line">				TODAY=$((TODAY+STARTTIME+DURATION-TODAYTIME))</span><br><span class="line">			fi</span><br><span class="line">		fi</span><br><span class="line">		if [[ $STARTTIME -gt $WEEKTIME ]]; then</span><br><span class="line">			WEEK=$((WEEK+DURATION))</span><br><span class="line">		else</span><br><span class="line">			if [[ $((STARTTIME+DURATION)) -gt $WEEKTIME ]]; then</span><br><span class="line">				WEEK=$((WEEK+STARTTIME+DURATION-WEEKTIME))</span><br><span class="line">			fi</span><br><span class="line">		fi</span><br><span class="line">		if [[ $STARTTIME -gt $MONTHTIME ]]; then</span><br><span class="line">			MONTH=$((MONTH+DURATION))</span><br><span class="line">		else</span><br><span class="line">			if [[ $((STARTTIME+DURATION)) -gt $MONTHTIME ]]; then</span><br><span class="line">				MONTH=$((WEEK+STARTTIME+DURATION-MONTHTIME))</span><br><span class="line">			fi</span><br><span class="line">		fi</span><br><span class="line">	done &lt; $1</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="BUG-时间起始问题"><a href="#BUG-时间起始问题" class="headerlink" title="BUG-时间起始问题"></a>BUG-时间起始问题</h3><p>最初插件中直接把metrics_generic_result中读取的时间作为本次记录开始时间，不过后来分析日志的时候发现，metrics_generic中的获取的第一列总是与写入时间相同，因此这个字段应当为本次阅读结束时间，所以添加了上述第14行代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ./bin/metric.sh</span><br><span class="line">	STARTTIME=$((ENDTIME-DURATION/1000)) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="BUG-莫名的时间归零？"><a href="#BUG-莫名的时间归零？" class="headerlink" title="BUG-莫名的时间归零？"></a>BUG-莫名的时间归零？</h3><p>之前在贴吧看到有人说有时候会出现今日统计变成0的情况，我今天上午也发现，用了一段时间之后总时间和今日阅读时间都莫名减少，一番纠结最终解决了这个问题︿(￣︶￣)︿</p>
+<p>前面讲到系统日志的rotate机制，当前日志保存在metrics_generic中，一段时间后压缩到&#x2F;var&#x2F;local&#x2F;log&#x2F;下，而插件在统计时间的时候也根据metrics_generic_youngest保证了压缩后的日志记录都加入到插件目录下的metrics_generic_result中，当前日志metrics_generic中的记录加入到metrics_generic_temp中，统计时两者都有计算，那么为什么会丢失数据呢？跟踪了日志变化之后发现，youngest对应的压缩日志文件并不是一成不变的，metrics_generic被移除后并没有直接新建一个压缩日志文件，而是追加到了youngest中（未超出限制的情况下）。这样的话，youngest对应的最新压缩日志被扫描过一次之后，由于current的值标记了当前文件已被处理，所以即使metrics_generic中的数据被追加到youngest对应文件中，这部分数据也不会添加进metrics_generic_result中，同时由于压缩后的数据已经metrics_generic中移除，所以也不会被加入metrics_generic_temp中，这部分信息消失了！<br>找到了原因，解决起来也就简单了：只要稍做调整，把youngest对应的压缩日志数据和metrcis_generic中的未压缩数据都加入到metrics_generic_temp中，并且前者在定时处理压缩日志时覆盖写入，后者在统计数据时追加写入，这样只要在统计数据之前执行一次定时任务，就可以保证所有日志信息都被计算\(^o^)&#x2F;YES!<br>将metrics_generic记录追加到metrics_generic_temp:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># ./bin/metric.sh</span><br><span class="line">cat /var/log/metrics_generic | grep reader.activeDuration | awk &#x27;BEGIN&#123;FS=&quot;,&quot;&#125;&#123;print $2,$7&#125;&#x27; \</span><br><span class="line">	&gt;&gt; $BASEDIR/log/metrics_generic_temp</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>将youngest对应记录覆盖到metrics_generic_temp:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ./bin/metric_service.sh</span><br><span class="line">if [ $CURRENT -eq $YOUNGEST ]; then</span><br><span class="line">	FILE=`echo $CURRENT | awk &#x27;&#123;printf &quot;/var/local/log/metrics_generic_%08d*&quot;, $1&#125;&#x27;`</span><br><span class="line">	zcat $FILE | grep reader.activeDuration | awk &#x27;BEGIN&#123;FS=&quot;,&quot;&#125;&#123;print $2,$7&#125;&#x27; \</span><br><span class="line">	&gt; $BASEDIR/log/metrics_generic_temp</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="信息展示"><a href="#信息展示" class="headerlink" title="信息展示"></a>信息展示</h3><p>加入了一个项目信息显示的按钮，没啥好说的就不赘述了。</p>
+<h2 id="当前成果展示"><a href="#当前成果展示" class="headerlink" title="当前成果展示"></a>当前成果展示</h2><p>总结一下的话，修复了原有的bug，加入了本月和本周累计，添加了一点项目说明。更多的功能敬请期待 ^_^</p>
+<p>当前效果图：<br><img src="/imgs/201612/show_time.png" alt="统计时间"><br><img src="/imgs/201612/show_info.png" alt="插件信息"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kindle/" rel="tag"># kindle</a>
+              <a href="/tags/%E8%B6%8A%E7%8B%B1/" rel="tag"># 越狱</a>
+              <a href="/tags/%E7%BB%9F%E8%AE%A1/" rel="tag"># 统计</a>
+              <a href="/tags/%E9%98%85%E8%AF%BB/" rel="tag"># 阅读</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E7%94%9F%E6%B4%BB/2016-12-29-another-beginning/" rel="prev" title="另一次开始">
+                  <i class="fa fa-angle-left"></i> 另一次开始
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/programming/2017-01-01-2017-01-01-hexo-customizing-and-SEO/" rel="next" title="Hexo博客SEO与个性化的一些问题">
+                  Hexo博客SEO与个性化的一些问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2022033732号 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kangbing Zhao</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

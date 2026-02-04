@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/imgs/pikachu.png">
+  <link rel="mask-icon" href="/imgs/pikachu.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.zhaokangbinggenius.top","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node我之前已经写过一篇关于 Tailscale 的文章，更多是「为什么用它、怎么工作的、配合局域网 DNS 的体验」这类方案介绍。 这次再写一篇，是因为我把部署方式做了调整：  之前：Tailscale 跑在“业务服务器”上（同时承载服务） 现在：单独做一台 独立 gateway，把网关职责（Subnet Router &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node">
+<meta property="og:url" content="https://blog.zhaokangbinggenius.top/posts/programming/2026-02-04-2026-02-04-new-article/index.html">
+<meta property="og:site_name" content="K.B.Zhao&#39;s Life Track">
+<meta property="og:description" content="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node我之前已经写过一篇关于 Tailscale 的文章，更多是「为什么用它、怎么工作的、配合局域网 DNS 的体验」这类方案介绍。 这次再写一篇，是因为我把部署方式做了调整：  之前：Tailscale 跑在“业务服务器”上（同时承载服务） 现在：单独做一台 独立 gateway，把网关职责（Subnet Router &amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-04T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-04T14:48:34.075Z">
+<meta property="article:author" content="Kangbing Zhao">
+<meta property="article:tag" content="homelab">
+<meta property="article:tag" content="tailscale">
+<meta property="article:tag" content="vpn">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.zhaokangbinggenius.top/posts/programming/2026-02-04-2026-02-04-new-article/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.zhaokangbinggenius.top/posts/programming/2026-02-04-2026-02-04-new-article/","path":"posts/programming/2026-02-04-2026-02-04-new-article/","title":"把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node | K.B.Zhao's Life Track</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">K.B.Zhao's Life Track</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">编程，阅读，日常，碎碎念</p>
+      <img class="custom-logo-image" src="/imgs/pikachu.png" alt="K.B.Zhao's Life Track">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-编程"><a href="/categories/programming" rel="section"><i class="fa fa-laptop-code fa-fw"></i>编程</a></li><li class="menu-item menu-item-阅读"><a href="/categories/reading" rel="section"><i class="fa fa-book fa-fw"></i>阅读</a></li><li class="menu-item menu-item-日常"><a href="/categories/life" rel="section"><i class="fa fa-camera fa-fw"></i>日常</a></li><li class="menu-item menu-item-碎碎念"><a href="/categories/snippet" rel="section"><i class="fa fa-regular fa-face-laugh-wink fa-fw"></i>碎碎念</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%8A-Tailscale-%E4%BB%8E%E4%B8%9A%E5%8A%A1%E6%9C%BA%E6%8B%86%E5%87%BA%E6%9D%A5%EF%BC%9A%E7%8B%AC%E7%AB%8B%E7%BD%91%E5%85%B3%E7%9A%84%E5%AD%90%E7%BD%91%E8%B7%AF%E7%94%B1%E4%B8%8E-Exit-Node"><span class="nav-number">1.</span> <span class="nav-text">把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%88%91%E6%83%B3%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">一、我想解决什么问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">二、网络架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83"><span class="nav-number">1.3.</span> <span class="nav-text">三、基础环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%89%E8%A3%85%E4%B8%8E-systemd-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text">四、安装与 systemd 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8B%B7%E8%B4%9D%E4%BA%8C%E8%BF%9B%E5%88%B6"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 拷贝二进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BF%AE%E5%A4%8D-systemd-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E5%BE%84"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 修复 systemd 服务路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. 启动服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AD%90%E7%BD%91%E8%B7%AF%E7%94%B1%EF%BC%88Subnet-Router%EF%BC%89%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.</span> <span class="nav-text">五、子网路由（Subnet Router）配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%80%E5%90%AF-IP-Forward%EF%BC%88%E5%85%B3%E9%94%AE%EF%BC%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 开启 IP Forward（关键）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%A3%E5%91%8A%E5%AD%90%E7%BD%91"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. 宣告子网</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Exit-Node-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.6.</span> <span class="nav-text">六、Exit Node 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81NAT-%E4%B8%8E%E8%BD%AC%E5%8F%91%EF%BC%9A%E8%B8%A9%E5%9D%91%E4%B8%8E%E4%BF%AE%E5%A4%8D"><span class="nav-number">1.7.</span> <span class="nav-text">七、NAT 与转发：踩坑与修复</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89%E9%97%AE%E9%A2%98%E8%A1%A8%E7%8E%B0"><span class="nav-number">1.7.1.</span> <span class="nav-text">1）问题表现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89%E4%BF%AE%E5%A4%8D%EF%BC%9AMASQUERADE%EF%BC%88SNAT%EF%BC%89"><span class="nav-number">1.7.2.</span> <span class="nav-text">2）修复：MASQUERADE（SNAT）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%EF%BC%89%E4%BF%AE%E5%A4%8D%EF%BC%9A%E5%85%81%E8%AE%B8-FORWARD"><span class="nav-number">1.7.3.</span> <span class="nav-text">3）修复：允许 FORWARD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%EF%BC%89%E6%8C%81%E4%B9%85%E5%8C%96%EF%BC%88%E9%9D%9E%E5%B8%B8%E9%87%8D%E8%A6%81%EF%BC%89"><span class="nav-number">1.7.4.</span> <span class="nav-text">4）持久化（非常重要）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E9%AA%8C%E6%94%B6%EF%BC%88%E4%B8%80%E5%AE%9A%E8%A6%81%E5%81%9A%EF%BC%89"><span class="nav-number">1.8.</span> <span class="nav-text">八、验收（一定要做）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89%E5%AD%90%E7%BD%91%E8%AE%BF%E9%97%AE%E9%AA%8C%E6%94%B6"><span class="nav-number">1.8.1.</span> <span class="nav-text">1）子网访问验收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89Exit-Node-%E9%AA%8C%E6%94%B6"><span class="nav-number">1.8.2.</span> <span class="nav-text">2）Exit Node 验收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">1.9.</span> <span class="nav-text">九、总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kangbing Zhao</p>
+  <div class="site-description" itemprop="description">Logging, Analysing, Hacking the life.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2026-02-04-2026-02-04-new-article/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-04 00:00:00 / 修改时间：14:48:34" itemprop="dateCreated datePublished" datetime="2026-02-04T00:00:00+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="把-Tailscale-从业务机拆出来：独立网关的子网路由与-Exit-Node"><a href="#把-Tailscale-从业务机拆出来：独立网关的子网路由与-Exit-Node" class="headerlink" title="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node"></a>把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node</h1><p>我之前已经写过一篇关于 Tailscale 的文章，更多是「为什么用它、怎么工作的、配合局域网 DNS 的体验」这类方案介绍。</p>
+<p>这次再写一篇，是因为我把部署方式做了调整：</p>
+<ul>
+<li>之前：Tailscale 跑在“业务服务器”上（同时承载服务）</li>
+<li>现在：单独做一台 <strong>独立 gateway</strong>，把网关职责（Subnet Router &#x2F; Exit Node &#x2F; NAT）和业务服务隔离</li>
+</ul>
+<p>这么做的核心诉求是：</p>
+<ul>
+<li>网关只做网关，故障域更小；业务服务折腾升级时，不影响远程回家路</li>
+<li>网络规则（转发&#x2F;NAT）集中在网关，排障更直观</li>
+</ul>
+<blockquote>
+<p>文中涉及网段、接口名、主机名等均使用示例&#x2F;占位符，你需要按自己的环境替换。</p>
+</blockquote>
+<span id="more"></span>
+
+<hr>
+<h2 id="一、我想解决什么问题？"><a href="#一、我想解决什么问题？" class="headerlink" title="一、我想解决什么问题？"></a>一、我想解决什么问题？</h2><p>我希望从外网访问家里的服务，但不想：</p>
+<ul>
+<li>开公网端口（安全风险）</li>
+<li>配置复杂的端口映射</li>
+<li>依赖不稳定的第三方穿透</li>
+</ul>
+<p>因此我的目标是：不暴露公网的前提下，在外网能像在家里一样访问局域网。</p>
+<p>这次用「独立网关」落地后，希望达到：</p>
+<ul>
+<li>外网访问整个家庭 LAN（示例：<code>192.168.x.0/24</code>）</li>
+<li>网关具备 Exit Node 能力（按需开启，不默认）</li>
+<li>重启后规则不丢（NAT&#x2F;转发持久化）</li>
+<li>避免“到期就失联”的隐患（控制台策略确认&#x2F;定期检查）</li>
+</ul>
+<hr>
+<h2 id="二、网络架构"><a href="#二、网络架构" class="headerlink" title="二、网络架构"></a>二、网络架构</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[外部设备（Tailscale 客户端）]</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">[Tailscale 虚拟网络]</span><br><span class="line">         |</span><br><span class="line">         v</span><br><span class="line">[独立网关（Ubuntu VM：Subnet Router + Exit Node）]  &lt;--LAN--&gt;  [家庭局域网（例如 192.168.x.0/24）]</span><br></pre></td></tr></table></figure>
+
+<p>这台网关负责：</p>
+<ul>
+<li>Subnet Router：把家庭 LAN 宣告给 Tailnet</li>
+<li>Exit Node：让外部设备按需走“家里出口”</li>
+<li>NAT 网关：让出口流量能正确从家庭网络出站</li>
+</ul>
+<p>业务服务器不再承载网关职责，只专注跑服务。</p>
+<hr>
+<h2 id="三、基础环境"><a href="#三、基础环境" class="headerlink" title="三、基础环境"></a>三、基础环境</h2><ul>
+<li>虚拟化平台：Proxmox</li>
+<li>网关系统：Ubuntu Server VM</li>
+<li>出口网卡：<code>&lt;WAN_IFACE&gt;</code></li>
+</ul>
+<hr>
+<h2 id="四、安装与-systemd-服务"><a href="#四、安装与-systemd-服务" class="headerlink" title="四、安装与 systemd 服务"></a>四、安装与 systemd 服务</h2><p>这次我用 tgz 手动安装（而不是 apt），主要是可控和省心：</p>
+<ul>
+<li>安装过程更可预期</li>
+<li>依赖更少，减少“仓库&#x2F;镜像不通”的变量</li>
+</ul>
+<h3 id="1-拷贝二进制"><a href="#1-拷贝二进制" class="headerlink" title="1. 拷贝二进制"></a>1. 拷贝二进制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">cp</span> tailscale tailscaled /usr/local/bin/</span><br><span class="line"></span><br><span class="line">tailscale version</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-修复-systemd-服务路径"><a href="#2-修复-systemd-服务路径" class="headerlink" title="2. 修复 systemd 服务路径"></a>2. 修复 systemd 服务路径</h3><p>tgz 自带的 service 文件有时默认写的是 <code>/usr/sbin/tailscaled</code>，但我实际放在 <code>/usr/local/bin/tailscaled</code>。</p>
+<p>检查并修正：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/systemd/system/tailscaled.service</span><br></pre></td></tr></table></figure>
+
+<p>确保类似字段正确：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ExecStart</span>=/usr/local/bin/tailscaled</span><br><span class="line"><span class="attr">ExecStopPost</span>=/usr/local/bin/tailscaled</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-启动服务"><a href="#3-启动服务" class="headerlink" title="3. 启动服务"></a>3. 启动服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> --now tailscaled</span><br><span class="line">systemctl status tailscaled</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、子网路由（Subnet-Router）配置"><a href="#五、子网路由（Subnet-Router）配置" class="headerlink" title="五、子网路由（Subnet Router）配置"></a>五、子网路由（Subnet Router）配置</h2><h3 id="1-开启-IP-Forward（关键）"><a href="#1-开启-IP-Forward（关键）" class="headerlink" title="1. 开启 IP Forward（关键）"></a>1. 开启 IP Forward（关键）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;net.ipv4.ip_forward = 1&#x27;</span> | sudo <span class="built_in">tee</span> /etc/sysctl.d/99-tailscale.conf</span><br><span class="line">sudo sysctl --system</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /proc/sys/net/ipv4/ip_forward</span><br><span class="line"><span class="comment"># 期望输出：1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-宣告子网"><a href="#2-宣告子网" class="headerlink" title="2. 宣告子网"></a>2. 宣告子网</h3><p>把 <code>&lt;LAN_CIDR&gt;</code> 替换成你的内网网段（示例：<code>192.168.x.0/24</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo tailscale up \</span><br><span class="line">  --advertise-routes=&lt;LAN_CIDR&gt; \</span><br><span class="line">  --accept-dns=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在 Tailscale Admin Console 里 Approve route。</p>
+<hr>
+<h2 id="六、Exit-Node-配置"><a href="#六、Exit-Node-配置" class="headerlink" title="六、Exit Node 配置"></a>六、Exit Node 配置</h2><p>如果希望网关同时提供 Exit Node：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo tailscale up \</span><br><span class="line">  --advertise-exit-node \</span><br><span class="line">  --advertise-routes=&lt;LAN_CIDR&gt; \</span><br><span class="line">  --accept-dns=<span class="literal">false</span> \</span><br><span class="line">  --snat-subnet-routes=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>我目前的策略是：</p>
+<ul>
+<li>保留 Exit Node 能力</li>
+<li>不默认开启，只在公共 Wi‑Fi &#x2F; 受限网络 &#x2F; 需要家庭出口时启用</li>
+</ul>
+<hr>
+<h2 id="七、NAT-与转发：踩坑与修复"><a href="#七、NAT-与转发：踩坑与修复" class="headerlink" title="七、NAT 与转发：踩坑与修复"></a>七、NAT 与转发：踩坑与修复</h2><h3 id="1）问题表现"><a href="#1）问题表现" class="headerlink" title="1）问题表现"></a>1）问题表现</h3><ul>
+<li>Exit Node 看起来启用了，但实际不能作为出口</li>
+<li>开启 Exit Node 后访问外网失败</li>
+</ul>
+<h3 id="2）修复：MASQUERADE（SNAT）"><a href="#2）修复：MASQUERADE（SNAT）" class="headerlink" title="2）修复：MASQUERADE（SNAT）"></a>2）修复：MASQUERADE（SNAT）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -A POSTROUTING -o &lt;WAN_IFACE&gt; -j MASQUERADE</span><br></pre></td></tr></table></figure>
+
+<h3 id="3）修复：允许-FORWARD"><a href="#3）修复：允许-FORWARD" class="headerlink" title="3）修复：允许 FORWARD"></a>3）修复：允许 FORWARD</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -P FORWARD ACCEPT</span><br></pre></td></tr></table></figure>
+
+<h3 id="4）持久化（非常重要）"><a href="#4）持久化（非常重要）" class="headerlink" title="4）持久化（非常重要）"></a>4）持久化（非常重要）</h3><p>不持久化的后果就是：</p>
+<blockquote>
+<p>重启 &#x3D; 规则丢失 &#x3D; 出口&#x2F;NAT 失效</p>
+</blockquote>
+<p>Ubuntu&#x2F;Debian 可以用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y iptables-persistent</span><br></pre></td></tr></table></figure>
+
+<p>安装时提示保存规则请选择 <code>YES</code>，规则通常保存到：</p>
+<ul>
+<li><code>/etc/iptables/rules.v4</code></li>
+</ul>
+<hr>
+<h2 id="八、验收（一定要做）"><a href="#八、验收（一定要做）" class="headerlink" title="八、验收（一定要做）"></a>八、验收（一定要做）</h2><h3 id="1）子网访问验收"><a href="#1）子网访问验收" class="headerlink" title="1）子网访问验收"></a>1）子网访问验收</h3><p>外部设备连接到 Tailscale 后，尝试访问内网资源（更推荐用真实业务协议，比如 ssh&#x2F;http）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line">ssh &lt;LAN_HOST&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2）Exit-Node-验收"><a href="#2）Exit-Node-验收" class="headerlink" title="2）Exit Node 验收"></a>2）Exit Node 验收</h3><p>开启 Exit Node 后，访问一个“查看出口 IP”的站点，确认出口变成家庭网络的出口（此处不贴具体站点与识别信息）。</p>
+<hr>
+<h2 id="九、总结"><a href="#九、总结" class="headerlink" title="九、总结"></a>九、总结</h2><p>把网关从业务服务器里拆出来，最大的收益是“远程回家的路”和业务服务解耦：</p>
+<ul>
+<li>业务服务升级&#x2F;重启&#x2F;折腾，不再影响远程访问能力</li>
+<li>网络规则收敛在网关，后续排障更集中</li>
+</ul>
+<p>实操层面需要重点关注的还是这几件事：</p>
+<ul>
+<li>tgz 安装后检查 systemd 路径</li>
+<li>Exit Node 不通优先排查：IP Forward &#x2F; NAT &#x2F; FORWARD &#x2F; 规则持久化</li>
+<li>控制台显示正常不代表真通：一定要用真实流量验收</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/homelab/" rel="tag"># homelab</a>
+              <a href="/tags/vpn/" rel="tag"># vpn</a>
+              <a href="/tags/tailscale/" rel="tag"># tailscale</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/programming/2025-04-25-tailscale-md/" rel="prev" title="使用 Tailscale 实现安全无公网暴露的内网访问方案">
+                  <i class="fa fa-angle-left"></i> 使用 Tailscale 实现安全无公网暴露的内网访问方案
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/life/2026-02-04-2022-11-14-autumn-outing/" rel="next" title="横沙岛秋游">
+                  横沙岛秋游 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2022033732号 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kangbing Zhao</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

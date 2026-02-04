@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/imgs/pikachu.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/imgs/pikachu.png">
+  <link rel="mask-icon" href="/imgs/pikachu.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.zhaokangbinggenius.top","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Logging, Analysing, Hacking the life.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="K.B.Zhao&#39;s Life Track">
+<meta property="og:url" content="https://blog.zhaokangbinggenius.top/index.html">
+<meta property="og:site_name" content="K.B.Zhao&#39;s Life Track">
+<meta property="og:description" content="Logging, Analysing, Hacking the life.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Kangbing Zhao">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.zhaokangbinggenius.top/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>K.B.Zhao's Life Track</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">K.B.Zhao's Life Track</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">编程，阅读，日常，碎碎念</p>
+      <img class="custom-logo-image" src="/imgs/pikachu.png" alt="K.B.Zhao's Life Track">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-编程"><a href="/categories/programming" rel="section"><i class="fa fa-laptop-code fa-fw"></i>编程</a></li><li class="menu-item menu-item-阅读"><a href="/categories/reading" rel="section"><i class="fa fa-book fa-fw"></i>阅读</a></li><li class="menu-item menu-item-日常"><a href="/categories/life" rel="section"><i class="fa fa-camera fa-fw"></i>日常</a></li><li class="menu-item menu-item-碎碎念"><a href="/categories/snippet" rel="section"><i class="fa fa-regular fa-face-laugh-wink fa-fw"></i>碎碎念</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kangbing Zhao</p>
+  <div class="site-description" itemprop="description">Logging, Analysing, Hacking the life.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/life/2026-02-04-2022-11-14-autumn-outing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/life/2026-02-04-2022-11-14-autumn-outing/" class="post-title-link" itemprop="url">横沙岛秋游</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-02-04 14:48:34" itemprop="dateCreated datePublished" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">日常</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>好久没来，贴几张上周末出去玩的照片吧</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/life/2026-02-04-2022-11-14-autumn-outing/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2026-02-04-2026-02-04-new-article/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/programming/2026-02-04-2026-02-04-new-article/" class="post-title-link" itemprop="url">把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-04 00:00:00 / 修改时间：14:48:34" itemprop="dateCreated datePublished" datetime="2026-02-04T00:00:00+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="把-Tailscale-从业务机拆出来：独立网关的子网路由与-Exit-Node"><a href="#把-Tailscale-从业务机拆出来：独立网关的子网路由与-Exit-Node" class="headerlink" title="把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node"></a>把 Tailscale 从业务机拆出来：独立网关的子网路由与 Exit Node</h1><p>我之前已经写过一篇关于 Tailscale 的文章，更多是「为什么用它、怎么工作的、配合局域网 DNS 的体验」这类方案介绍。</p>
+<p>这次再写一篇，是因为我把部署方式做了调整：</p>
+<ul>
+<li>之前：Tailscale 跑在“业务服务器”上（同时承载服务）</li>
+<li>现在：单独做一台 <strong>独立 gateway</strong>，把网关职责（Subnet Router &#x2F; Exit Node &#x2F; NAT）和业务服务隔离</li>
+</ul>
+<p>这么做的核心诉求是：</p>
+<ul>
+<li>网关只做网关，故障域更小；业务服务折腾升级时，不影响远程回家路</li>
+<li>网络规则（转发&#x2F;NAT）集中在网关，排障更直观</li>
+</ul>
+<blockquote>
+<p>文中涉及网段、接口名、主机名等均使用示例&#x2F;占位符，你需要按自己的环境替换。</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/programming/2026-02-04-2026-02-04-new-article/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2025-04-25-tailscale-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/programming/2025-04-25-tailscale-md/" class="post-title-link" itemprop="url">使用 Tailscale 实现安全无公网暴露的内网访问方案</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-25 23:30:54" itemprop="dateCreated datePublished" datetime="2025-04-25T23:30:54+00:00">2025-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/programming/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Tailscale-实现安全无公网暴露的内网访问方案"><a href="#Tailscale-实现安全无公网暴露的内网访问方案" class="headerlink" title="Tailscale 实现安全无公网暴露的内网访问方案"></a>Tailscale 实现安全无公网暴露的内网访问方案</h1><h2 id="一、为什么需要内网穿透？"><a href="#一、为什么需要内网穿透？" class="headerlink" title="一、为什么需要内网穿透？"></a>一、为什么需要内网穿透？</h2><p>在家中，我有一台 Ubuntu 服务器运行了一些自建服务，比如文件同步、git仓库、影音服务等。这些服务默认只在局域网中访问，通过cosmos将内网域名绑定到对应的端口上，而域名的解析依赖家庭网关上的 OpenWrt DNS 设置。</p>
+<p>为了方便我在外出时也能访问这些服务（如从手机查看笔记、上传照片），需要实现“内网穿透” —— 但我并不想：</p>
+<ul>
+<li>开公网端口（有安全风险）</li>
+<li>配置复杂的端口映射</li>
+<li>依赖第三方穿透平台（不稳定、可能收费）</li>
+</ul>
+<p>最终发现  <strong>Tailscale</strong>，一个轻量、私密、安全的零配置 VPN 工具，能完美的满足需求。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/programming/2025-04-25-tailscale-md/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2023-02-12-migrate-to-new-homelab-server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/programming/2023-02-12-migrate-to-new-homelab-server/" class="post-title-link" itemprop="url">正式迁移到新的homelab了！</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-12 22:13:30" itemprop="dateCreated datePublished" datetime="2023-02-12T22:13:30+00:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>过年回家前组装完成了新的电脑当做服务器，但是数据、娱乐和服务都没来得及迁移，所以这段时间只是当做备用的游戏机。经过不断的蚂蚁搬家，今天终于全部迁移完成了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/programming/2023-02-12-migrate-to-new-homelab-server/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/programming/2022-11-19-%E5%BC%80%E5%A7%8B%E5%81%A5%E8%BA%AB%E4%BA%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/programming/2022-11-19-%E5%BC%80%E5%A7%8B%E5%81%A5%E8%BA%AB%E4%BA%86/" class="post-title-link" itemprop="url">开始健身了</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-19 18:15:27" itemprop="dateCreated datePublished" datetime="2022-11-19T18:15:27+00:00">2022-11-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>加油吧<br><img src="/../imgs/202211/image-20221119182339828.png" alt="image-20221119182339828"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/reading/2019-03-31-2019-03-31-book-functional-program/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/reading/2019-03-31-2019-03-31-book-functional-program/" class="post-title-link" itemprop="url">响应式编程之一：函数式编程思维读书笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-31 01:14:33" itemprop="dateCreated datePublished" datetime="2019-03-31T01:14:33+00:00">2019-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/reading/" itemprop="url" rel="index"><span itemprop="name">阅读</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近在项目中试用了下Java8提供的stream，简洁又优雅。恰好看到有团队在做响应式改造的工作，系统了解下这种新的设计方式吧。先从语言基础开始，读一本最基础的<a target="_blank" rel="noopener" href="https://book.douban.com/subject/26587213/">《函数式编程思维》</a>，后续再补充<a target="_blank" rel="noopener" href="https://book.douban.com/subject/26772632/">《Java8实战》</a>。<br>读书笔记xmind如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/reading/2019-03-31-2019-03-31-book-functional-program/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/reading/2018-12-12-2018-12-12-reading-flow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/reading/2018-12-12-2018-12-12-reading-flow/" class="post-title-link" itemprop="url">读书笔记-《心流-最优体验心理学》</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-12 23:35:15" itemprop="dateCreated datePublished" datetime="2018-12-12T23:35:15+00:00">2018-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/reading/" itemprop="url" rel="index"><span itemprop="name">阅读</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>作为清理todolist的一部分，花3天读完了<a target="_blank" rel="noopener" href="https://book.douban.com/subject/27186106/">《心流-最优体验心理学》</a>，最大的遗憾是太晚翻开它，几乎每一章都有种被击中的感觉。<br>比如，内心的秩序是幸福感最大的来源，获得心流的必要条件（沉浸、挑战、即时回馈），被动娱乐与主动培养的兴趣，焦虑感对注意力的掠夺效果等，读完如梦初醒。<br>特别推荐序言和前三章，更精简一点，前两篇序言也够用了，其他内容看个人需要吧。记录的脑图在此，原文件见网盘分享。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/reading/2018-12-12-2018-12-12-reading-flow/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/snippet/2018-12-12-2018-12-12-what-is-your-bgm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/snippet/2018-12-12-2018-12-12-what-is-your-bgm/" class="post-title-link" itemprop="url">你的bgm是什么？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-12 18:03:29" itemprop="dateCreated datePublished" datetime="2018-12-12T18:03:29+00:00">2018-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/snippet/" itemprop="url" rel="index"><span itemprop="name">碎碎念</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>突如其来的冬天，突然炸裂的热水器，意料之外的一天休假。在这么一个晚上一边应对钉钉群和电话的狂轰乱炸一边等待维修师傅上门。在室温9.6℃的房间里瑟瑟发抖的时候无意中看到这么一个问题，</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/279370949/answer/550212629">如果这是个每个人都有一首BGM（背景音乐）的世界，你的BGM会是什么呢？</a></p>
+</blockquote>
+<p>我的bgm是什么呢？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/snippet/2018-12-12-2018-12-12-what-is-your-bgm/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/life/2018-12-09-2018-12-09-2018-12-09-mac-screen-shot-shortcutkey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/life/2018-12-09-2018-12-09-2018-12-09-mac-screen-shot-shortcutkey/" class="post-title-link" itemprop="url">配置和钉钉一样好用的截图快捷键</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-09 22:17:50" itemprop="dateCreated datePublished" datetime="2018-12-09T22:17:50+00:00">2018-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">日常</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>习惯了钉钉提供的command+shift+A带来全局截图+涂鸦+复制到剪切板之后，在没有钉钉的环境上面操作步履维艰（不要问为什么不在自己电脑上装钉钉）。为了保持一致的体验，试用了”截图”和”snappy”两个app之后，发现还是mac自带的截图工具更加自然，唯一的区别在于少了涂鸦功能，这点倒是无伤大雅。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/life/2018-12-09-2018-12-09-2018-12-09-mac-screen-shot-shortcutkey/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhaokangbinggenius.top/posts/life/2018-12-03-2018-12-03-make-and-complete-a-plan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Kangbing Zhao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="K.B.Zhao's Life Track">
+      <meta itemprop="description" content="Logging, Analysing, Hacking the life.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | K.B.Zhao's Life Track">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/posts/life/2018-12-03-2018-12-03-make-and-complete-a-plan/" class="post-title-link" itemprop="url">预则立-关于下一阶段的计划</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-03 01:21:35" itemprop="dateCreated datePublished" datetime="2018-12-03T01:21:35+00:00">2018-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-04 14:48:34" itemprop="dateModified" datetime="2026-02-04T14:48:34+00:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">日常</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>凡事预则立，不预则废。周六加班+周日睡懒觉+叫外卖+打游戏+看视频度过了又一个典型周末之后，偶然翻起GitHub里面烂尾的项目，wunderlist里面堆积的计划，书单和pocket里面越来越多的存货，加上上周和老大面谈给出的成长路径，终于决定不能再这样下去了。<br>从另一篇文章那里得到了启发，先分三步走吧。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/life/2018-12-03-2018-12-03-make-and-complete-a-plan/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2022033732号 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kangbing Zhao</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
